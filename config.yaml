@@ -1,0 +1,13 @@
+# All numbers here are ASSUMPTIONS. State them in the README.
+costs:
+  review_cost_usd: 5.00        # assumption: cost of one analyst review
+  false_decline_cost_usd: 10.00 # assumption: cost of blocking a legitimate customer
+  # missed fraud costs the transaction amount itself
+
+review:
+  daily_review_budget: 200     # assumption: cases analysts can review per day
+
+split:
+  # fill in once you know the dataset's date range (ROADMAP step 3)
+  train_end: null
+  validation_end: null
