@@ -1,8 +1,10 @@
 # All numbers here are ASSUMPTIONS. State them in the README.
 costs:
-  review_cost_usd: 5.00        # assumption: cost of one analyst review
-  false_decline_cost_usd: 10.00 # assumption: cost of blocking a legitimate customer
-  # missed fraud costs the transaction amount itself
+  review_cost_usd: 5.00        # assumption: cost of one analyst review (a few minutes of analyst time)
+  false_decline_cost_usd: 10.00 # assumption: cost of blocking a legitimate customer (lost sale, support call, annoyance)
+  # Also assumed (see src/costs.py): an approved fraud loses its whole amount; an analyst
+  # always catches fraud on review and always approves a legitimate transaction; blocking a
+  # fraud costs nothing.
 
 review:
   daily_review_budget: 30      # assumption: cases analysts can review per day. About 1% of the
