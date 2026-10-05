@@ -2,17 +2,14 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ApiError, apiGet, type QueueItem, type QueueResponse } from "@/lib/api";
+import { ApiError, type QueueItem, type QueueResponse } from "@/lib/api";
 import { categoryName, money, percent, timeOfDay } from "@/lib/format";
+import { errorMessage, useApiGet } from "@/lib/use-api";
+import { LoadError, Loading } from "./status";
 
 // The demo holds the test months only.
 const FIRST_DAY = "2020-10-01";
 const LAST_DAY = "2020-12-31";
-const SLOW_AFTER_MS = 3000; // free hosting sleeps when idle; the first request can take 30 s or more
-
-type Outcome = { status: "loaded"; data: QueueResponse } | { status: "empty" } | { status: "error"; message: string };
-type State = { status: "loading" } | Outcome;
 
 function validDay(value: string | null): string {
   return value && /^\d{4}-\d{2}-\d{2}$/.test(value) && value >= FIRST_DAY && value <= LAST_DAY ? value : FIRST_DAY;
@@ -22,35 +19,11 @@ export default function QueueView() {
   const router = useRouter();
   const pathname = usePathname();
   const day = validDay(useSearchParams().get("date"));
-  const [attempt, setAttempt] = useState(0); // bumped by Retry
-
-  // Each request is identified by day + attempt. Results are stored with that key,
-  // so "loading" is simply "no result yet for the current key" and is never set by hand.
-  const requestKey = `${day}#${attempt}`;
-  const [result, setResult] = useState<{ key: string; outcome: Outcome } | null>(null);
-  const [slowKey, setSlowKey] = useState<string | null>(null);
-  const state: State = result?.key === requestKey ? result.outcome : { status: "loading" };
-  const slow = slowKey === requestKey;
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const finish = (outcome: Outcome) => setResult({ key: requestKey, outcome });
-    const slowTimer = setTimeout(() => setSlowKey(requestKey), SLOW_AFTER_MS);
-
-    apiGet<QueueResponse>(`/queue?date=${day}`, { signal: controller.signal })
-      .then((data) => finish(data.cases.length ? { status: "loaded", data } : { status: "empty" }))
-      .catch((error) => {
-        if (controller.signal.aborted) return; // a newer date was picked
-        if (error instanceof ApiError && error.status === 404) finish({ status: "empty" });
-        else finish({ status: "error", message: error instanceof ApiError ? error.message : "Couldn't reach the API." });
-      })
-      .finally(() => clearTimeout(slowTimer));
-
-    return () => {
-      controller.abort();
-      clearTimeout(slowTimer);
-    };
-  }, [day, requestKey]);
+  const { state, slow, retry } = useApiGet<QueueResponse>(`/queue?date=${day}`);
+  // The API answers 404 when a day has no review cases: show that as "empty", not as an error.
+  const empty =
+    (state.status === "error" && state.error instanceof ApiError && state.error.status === 404) ||
+    (state.status === "loaded" && state.data.cases.length === 0);
 
   function pickDay(value: string) {
     // Keep the day in the URL so Back from a case returns to it.
@@ -78,33 +51,12 @@ export default function QueueView() {
       </div>
 
       <div className="mt-6" aria-live="polite">
-        {state.status === "loading" && (
-          <p className="text-muted">
-            Loading cases for {day}…
-            {slow && (
-              <span className="mt-2 block">
-                The demo server is probably waking up after being idle. This can take up to a minute the first time.
-              </span>
-            )}
-          </p>
+        {state.status === "loading" && <Loading what={`cases for ${day}`} slow={slow} />}
+        {empty && <p className="text-muted">No review cases on {day}. Try another day.</p>}
+        {state.status === "error" && !empty && (
+          <LoadError message={`Couldn't load the queue. ${errorMessage(state.error)}`} onRetry={retry} />
         )}
-
-        {state.status === "empty" && <p className="text-muted">No review cases on {day}. Try another day.</p>}
-
-        {state.status === "error" && (
-          <div role="alert" className="rounded-md border border-line p-4">
-            <p>Couldn&apos;t load the queue: {state.message}</p>
-            <button
-              type="button"
-              onClick={() => setAttempt((n) => n + 1)}
-              className="mt-3 rounded-md bg-accent px-4 py-2 text-sm font-medium text-white"
-            >
-              Retry
-            </button>
-          </div>
-        )}
-
-        {state.status === "loaded" && <CaseList data={state.data} />}
+        {state.status === "loaded" && !empty && <CaseList data={state.data} />}
       </div>
     </section>
   );
