@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
-/* Plain and professional: white background, dark text, one accent colour. */
+/* Plain and professional: white background, dark text, one accent colour for links
+   and buttons, and one colour per action (approve green, review amber, block red). */
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --muted: #525252;
   --line: #e5e5e5;
+  --surface: #fafafa;
   --accent: #1d4ed8;
   --accent-light: #eff6ff;
+  --approve: #15803d;
+  --approve-light: #f0fdf4;
+  --review: #b45309;
+  --review-light: #fffbeb;
+  --block: #b91c1c;
+  --block-light: #fef2f2;
 }
 
 @theme inline {
@@ -15,8 +23,15 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-surface: var(--surface);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
+  --color-approve: var(--approve);
+  --color-approve-light: var(--approve-light);
+  --color-review: var(--review);
+  --color-review-light: var(--review-light);
+  --color-block: var(--block);
+  --color-block-light: var(--block-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

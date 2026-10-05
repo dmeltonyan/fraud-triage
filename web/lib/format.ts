@@ -27,6 +27,13 @@ export function money(value: number): string {
   return dollars.format(value);
 }
 
+const wholeDollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+/** Rounded to the dollar, for headline figures. */
+export function wholeMoney(value: number): string {
+  return wholeDollars.format(value);
+}
+
 export function percent(probability: number): string {
   return `${(probability * 100).toFixed(probability < 0.1 ? 1 : 0)}%`;
 }

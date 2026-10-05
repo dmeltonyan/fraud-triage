@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ApiError, type QueueItem, type QueueResponse } from "@/lib/api";
 import { categoryName, money, percent, timeOfDay } from "@/lib/format";
 import { errorMessage, useApiGet } from "@/lib/use-api";
-import { LoadError, Loading } from "./status";
+import { LoadError, Loading } from "../status";
 
 // The demo holds the test months only.
 const FIRST_DAY = "2020-10-01";
@@ -35,7 +35,11 @@ export default function QueueView() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold">Review queue</h1>
-          <p className="mt-1 text-muted">Cases the cost-based policy sent to an analyst, largest expected loss first.</p>
+          <p className="mt-1 max-w-2xl text-muted">
+            You&apos;re the analyst. These are the cases the policy sent for review on this day, largest expected loss
+            first. Open one, read why it was flagged, and make your call; the app then shows whether it was really
+            fraud.
+          </p>
         </div>
         <label className="flex flex-col text-sm font-medium">
           Day
