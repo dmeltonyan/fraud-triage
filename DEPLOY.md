@@ -103,7 +103,7 @@ If something fails, open the browser's developer console (F12 → Console) and c
 | Task | How |
 |---|---|
 | Clear all reviews | On your machine: `.venv\Scripts\python -m src.api.reset_reviews` |
-| Reload the demo data (after retraining) | `.venv\Scripts\python -m src.export_demo --upload` (also clears reviews). Then copy the new charts into `web/public/figures/` and `reports/metrics.json` and `reports/policy_results.json` into `web/data/` (the overview page reads its numbers from them), and push so Vercel redeploys |
+| Reload the demo data (after retraining) | `.venv\Scripts\python -m src.export_demo --upload` (also clears reviews). Then copy the new charts into `web/public/figures/` and `reports/metrics.json` and `reports/policy_results.json` into `web/results/` (the overview page reads its numbers from them), and push so Vercel redeploys |
 | Supabase project paused | Free projects pause after about a week without activity. Open the Supabase dashboard and click **Restore** |
 | Too many reviews | After 5,000 reviews the API returns "review limit reached" until you clear them. The limit and the 10-per-minute rate limit are in `config.yaml` under `api:` |
 | Change the database password | Reset it in Supabase, then update `DATABASE_URL` in Render (and in your local `.env`) |

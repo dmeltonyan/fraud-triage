@@ -1,9 +1,9 @@
 // Headline numbers for the overview page, read at build time from copies of
-// reports/metrics.json and reports/policy_results.json (in web/data/). Built into
+// reports/metrics.json and reports/policy_results.json (in web/results/). Built into
 // the site, so the overview never waits for the API to wake up. After retraining,
 // copy the two files again (see DEPLOY.md).
-import metrics from "@/data/metrics.json";
-import results from "@/data/policy_results.json";
+import metrics from "@/results/metrics.json";
+import results from "@/results/policy_results.json";
 
 const sets = Object.values(metrics.sets);
 const ours = results.default.cost_based;

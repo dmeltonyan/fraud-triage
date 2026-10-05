@@ -1,0 +1,588 @@
+{
+  "test_months": [
+    "2020-10",
+    "2020-11",
+    "2020-12"
+  ],
+  "transactions": 281521,
+  "frauds": 936,
+  "fraud_dollars": 489893.83999999997,
+  "costs": {
+    "review_cost_usd": 5.0,
+    "false_decline_cost_usd": 10.0
+  },
+  "default_budget": 30,
+  "default": {
+    "approve_all": {
+      "fraud_dollars_lost": 489893.83999999997,
+      "fraud_dollars_caught": 0.0,
+      "frauds_caught": 0,
+      "frauds_missed": 936,
+      "reviews": 0,
+      "blocks": 0,
+      "legit_declined": 0,
+      "total_cost": 489893.83999999997
+    },
+    "threshold": {
+      "fraud_dollars_lost": 24164.049999999996,
+      "fraud_dollars_caught": 465729.79,
+      "frauds_caught": 832,
+      "frauds_missed": 104,
+      "reviews": 2760,
+      "blocks": 0,
+      "legit_declined": 0,
+      "total_cost": 37964.049999999996
+    },
+    "cost_based": {
+      "fraud_dollars_lost": 4526.63,
+      "fraud_dollars_caught": 485367.20999999996,
+      "frauds_caught": 808,
+      "frauds_missed": 128,
+      "reviews": 1419,
+      "blocks": 778,
+      "legit_declined": 114,
+      "total_cost": 12761.630000000001
+    },
+    "cost_review_only": {
+      "fraud_dollars_lost": 10563.13,
+      "fraud_dollars_caught": 479330.70999999996,
+      "frauds_caught": 763,
+      "frauds_missed": 173,
+      "reviews": 2052,
+      "blocks": 0,
+      "legit_declined": 0,
+      "total_cost": 20823.129999999997
+    }
+  },
+  "budget_curve": {
+    "5": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 336144.82999999996,
+        "fraud_dollars_caught": 153749.00999999998,
+        "frauds_caught": 340,
+        "frauds_missed": 596,
+        "reviews": 460,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 338444.82999999996
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 5850.33,
+        "fraud_dollars_caught": 484043.51,
+        "frauds_caught": 797,
+        "frauds_missed": 139,
+        "reviews": 460,
+        "blocks": 1506,
+        "legit_declined": 731,
+        "total_cost": 15460.33
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 246330.62,
+        "fraud_dollars_caught": 243563.21999999997,
+        "frauds_caught": 280,
+        "frauds_missed": 656,
+        "reviews": 460,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 248630.62
+      }
+    },
+    "10": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 192139.28999999998,
+        "fraud_dollars_caught": 297754.55,
+        "frauds_caught": 554,
+        "frauds_missed": 382,
+        "reviews": 920,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 196739.28999999998
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 5234.82,
+        "fraud_dollars_caught": 484659.02,
+        "frauds_caught": 802,
+        "frauds_missed": 134,
+        "reviews": 872,
+        "blocks": 1155,
+        "legit_declined": 429,
+        "total_cost": 13884.82
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 120156.95999999999,
+        "fraud_dollars_caught": 369736.88,
+        "frauds_caught": 489,
+        "frauds_missed": 447,
+        "reviews": 912,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 124716.95999999999
+      }
+    },
+    "15": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 106254.38,
+        "fraud_dollars_caught": 383639.46,
+        "frauds_caught": 681,
+        "frauds_missed": 255,
+        "reviews": 1380,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 113154.38
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 4831.34,
+        "fraud_dollars_caught": 485062.5,
+        "frauds_caught": 804,
+        "frauds_missed": 132,
+        "reviews": 1156,
+        "blocks": 949,
+        "legit_declined": 254,
+        "total_cost": 13151.34
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 59691.119999999995,
+        "fraud_dollars_caught": 430202.72,
+        "frauds_caught": 611,
+        "frauds_missed": 325,
+        "reviews": 1321,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 66296.12
+      }
+    },
+    "20": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 59643.95,
+        "fraud_dollars_caught": 430249.89,
+        "frauds_caught": 757,
+        "frauds_missed": 179,
+        "reviews": 1840,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 68843.95
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 4545.969999999999,
+        "fraud_dollars_caught": 485347.87,
+        "frauds_caught": 807,
+        "frauds_missed": 129,
+        "reviews": 1308,
+        "blocks": 847,
+        "legit_declined": 166,
+        "total_cost": 12745.97
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 31297.350000000006,
+        "fraud_dollars_caught": 458596.49,
+        "frauds_caught": 678,
+        "frauds_missed": 258,
+        "reviews": 1655,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 39572.350000000006
+      }
+    },
+    "30": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 24164.049999999996,
+        "fraud_dollars_caught": 465729.79,
+        "frauds_caught": 832,
+        "frauds_missed": 104,
+        "reviews": 2760,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 37964.049999999996
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 4526.63,
+        "fraud_dollars_caught": 485367.20999999996,
+        "frauds_caught": 808,
+        "frauds_missed": 128,
+        "reviews": 1419,
+        "blocks": 778,
+        "legit_declined": 114,
+        "total_cost": 12761.630000000001
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 10563.13,
+        "fraud_dollars_caught": 479330.70999999996,
+        "frauds_caught": 763,
+        "frauds_missed": 173,
+        "reviews": 2052,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 20823.129999999997
+      }
+    },
+    "45": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 5553.08,
+        "fraud_dollars_caught": 484340.76,
+        "frauds_caught": 875,
+        "frauds_missed": 61,
+        "reviews": 4140,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 26253.08
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 4526.63,
+        "fraud_dollars_caught": 485367.20999999996,
+        "frauds_caught": 808,
+        "frauds_missed": 128,
+        "reviews": 1432,
+        "blocks": 775,
+        "legit_declined": 113,
+        "total_cost": 12816.630000000001
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 4555.88,
+        "fraud_dollars_caught": 485337.95999999996,
+        "frauds_caught": 806,
+        "frauds_missed": 130,
+        "reviews": 2194,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 15525.880000000001
+      }
+    },
+    "60": {
+      "approve_all": {
+        "fraud_dollars_lost": 489893.83999999997,
+        "fraud_dollars_caught": 0.0,
+        "frauds_caught": 0,
+        "frauds_missed": 936,
+        "reviews": 0,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 489893.83999999997
+      },
+      "threshold": {
+        "fraud_dollars_lost": 1897.2099999999998,
+        "fraud_dollars_caught": 487996.63,
+        "frauds_caught": 901,
+        "frauds_missed": 35,
+        "reviews": 5520,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 29497.21
+      },
+      "cost_based": {
+        "fraud_dollars_lost": 4526.63,
+        "fraud_dollars_caught": 485367.20999999996,
+        "frauds_caught": 808,
+        "frauds_missed": 128,
+        "reviews": 1432,
+        "blocks": 775,
+        "legit_declined": 113,
+        "total_cost": 12816.630000000001
+      },
+      "cost_review_only": {
+        "fraud_dollars_lost": 4526.63,
+        "fraud_dollars_caught": 485367.20999999996,
+        "frauds_caught": 808,
+        "frauds_missed": 128,
+        "reviews": 2206,
+        "blocks": 0,
+        "legit_declined": 0,
+        "total_cost": 15556.630000000001
+      }
+    }
+  },
+  "by_month": {
+    "2020-10": {
+      "transactions_per_day": 2237.032258064516,
+      "frauds_per_day": 12.387096774193548,
+      "fraud_dollars": 195572.96999999997,
+      "policies": {
+        "approve_all": {
+          "fraud_dollars_lost": 195572.96999999997,
+          "fraud_dollars_caught": 0.0,
+          "frauds_caught": 0,
+          "frauds_missed": 384,
+          "reviews": 0,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 195572.96999999997
+        },
+        "threshold": {
+          "fraud_dollars_lost": 11189.62,
+          "fraud_dollars_caught": 184383.34999999998,
+          "frauds_caught": 332,
+          "frauds_missed": 52,
+          "reviews": 930,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 15839.62
+        },
+        "cost_based": {
+          "fraud_dollars_lost": 2220.0800000000004,
+          "fraud_dollars_caught": 193352.88999999998,
+          "frauds_caught": 323,
+          "frauds_missed": 61,
+          "reviews": 395,
+          "blocks": 286,
+          "legit_declined": 26,
+          "total_cost": 4455.08
+        },
+        "cost_review_only": {
+          "fraud_dollars_lost": 5282.15,
+          "fraud_dollars_caught": 190290.82,
+          "frauds_caught": 304,
+          "frauds_missed": 80,
+          "reviews": 649,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 8527.15
+        }
+      }
+    },
+    "2020-11": {
+      "transactions_per_day": 2421.1666666666665,
+      "frauds_per_day": 9.8,
+      "fraud_dollars": 153182.19,
+      "policies": {
+        "approve_all": {
+          "fraud_dollars_lost": 153182.19,
+          "fraud_dollars_caught": 0.0,
+          "frauds_caught": 0,
+          "frauds_missed": 294,
+          "reviews": 0,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 153182.19
+        },
+        "threshold": {
+          "fraud_dollars_lost": 3840.9299999999994,
+          "fraud_dollars_caught": 149341.25999999998,
+          "frauds_caught": 275,
+          "frauds_missed": 19,
+          "reviews": 900,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 8340.93
+        },
+        "cost_based": {
+          "fraud_dollars_lost": 613.2299999999999,
+          "fraud_dollars_caught": 152568.96,
+          "frauds_caught": 259,
+          "frauds_missed": 35,
+          "reviews": 335,
+          "blocks": 257,
+          "legit_declined": 28,
+          "total_cost": 2568.23
+        },
+        "cost_review_only": {
+          "fraud_dollars_lost": 894.84,
+          "fraud_dollars_caught": 152287.34999999998,
+          "frauds_caught": 253,
+          "frauds_missed": 41,
+          "reviews": 583,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 3809.84
+        }
+      }
+    },
+    "2020-12": {
+      "transactions_per_day": 4501.225806451613,
+      "frauds_per_day": 8.32258064516129,
+      "fraud_dollars": 141138.68,
+      "policies": {
+        "approve_all": {
+          "fraud_dollars_lost": 141138.68,
+          "fraud_dollars_caught": 0.0,
+          "frauds_caught": 0,
+          "frauds_missed": 258,
+          "reviews": 0,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 141138.68
+        },
+        "threshold": {
+          "fraud_dollars_lost": 9133.5,
+          "fraud_dollars_caught": 132005.18,
+          "frauds_caught": 225,
+          "frauds_missed": 33,
+          "reviews": 930,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 13783.5
+        },
+        "cost_based": {
+          "fraud_dollars_lost": 1693.3200000000002,
+          "fraud_dollars_caught": 139445.36,
+          "frauds_caught": 226,
+          "frauds_missed": 32,
+          "reviews": 689,
+          "blocks": 235,
+          "legit_declined": 60,
+          "total_cost": 5738.32
+        },
+        "cost_review_only": {
+          "fraud_dollars_lost": 4386.14,
+          "fraud_dollars_caught": 136752.54,
+          "frauds_caught": 206,
+          "frauds_missed": 52,
+          "reviews": 820,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 8486.14
+        }
+      }
+    }
+  },
+  "review_cost_sensitivity": {
+    "review_cost_x0.5": {
+      "review_cost_usd": 2.5,
+      "policies": {
+        "approve_all": {
+          "fraud_dollars_lost": 489893.83999999997,
+          "fraud_dollars_caught": 0.0,
+          "frauds_caught": 0,
+          "frauds_missed": 936,
+          "reviews": 0,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 489893.83999999997
+        },
+        "threshold": {
+          "fraud_dollars_lost": 24164.049999999996,
+          "fraud_dollars_caught": 465729.79,
+          "frauds_caught": 832,
+          "frauds_missed": 104,
+          "reviews": 2760,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 31064.049999999996
+        },
+        "cost_based": {
+          "fraud_dollars_lost": 3761.28,
+          "fraud_dollars_caught": 486132.56,
+          "frauds_caught": 831,
+          "frauds_missed": 105,
+          "reviews": 1945,
+          "blocks": 631,
+          "legit_declined": 55,
+          "total_cost": 9173.78
+        },
+        "cost_review_only": {
+          "fraud_dollars_lost": 10234.9,
+          "fraud_dollars_caught": 479658.94,
+          "frauds_caught": 778,
+          "frauds_missed": 158,
+          "reviews": 2320,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 16034.9
+        }
+      }
+    },
+    "review_cost_x2.0": {
+      "review_cost_usd": 10.0,
+      "policies": {
+        "approve_all": {
+          "fraud_dollars_lost": 489893.83999999997,
+          "fraud_dollars_caught": 0.0,
+          "frauds_caught": 0,
+          "frauds_missed": 936,
+          "reviews": 0,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 489893.83999999997
+        },
+        "threshold": {
+          "fraud_dollars_lost": 24164.049999999996,
+          "fraud_dollars_caught": 465729.79,
+          "frauds_caught": 832,
+          "frauds_missed": 104,
+          "reviews": 2760,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 51764.049999999996
+        },
+        "cost_based": {
+          "fraud_dollars_lost": 5850.33,
+          "fraud_dollars_caught": 484043.51,
+          "frauds_caught": 797,
+          "frauds_missed": 139,
+          "reviews": 0,
+          "blocks": 1941,
+          "legit_declined": 1144,
+          "total_cost": 17290.33
+        },
+        "cost_review_only": {
+          "fraud_dollars_lost": 11785.280000000002,
+          "fraud_dollars_caught": 478108.55999999994,
+          "frauds_caught": 721,
+          "frauds_missed": 215,
+          "reviews": 1803,
+          "blocks": 0,
+          "legit_declined": 0,
+          "total_cost": 29815.280000000002
+        }
+      }
+    }
+  }
+}
