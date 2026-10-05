@@ -19,7 +19,7 @@ One step per session. Check the box only when "done when" is true.
 
 ## Week 2: decisions and API
 
-- [ ] **7. Calibration.** Calibrate probabilities on the validation months and plot a reliability curve.
+- [x] **7. Calibration.** Calibrate probabilities on the validation months and plot a reliability curve.
   Done when: the plot is saved and predicted probabilities line up with actual fraud rates.
 - [ ] **8. Cost model.** Missed fraud, review cost, and false-decline cost in `config.yaml`, each marked as an assumption.
   Done when: changing a value in the config changes the results without touching code.

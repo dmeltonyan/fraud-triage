@@ -1,4 +1,5 @@
-"""Split by time, train the logistic regression baseline and LightGBM, and report test metrics.
+"""Split by time, train the logistic regression baseline and LightGBM, calibrate
+LightGBM, report test metrics, and save calibrated scores for the decision policy.
 
 Run from the project root with:  python -m src.train
 """
@@ -7,6 +8,7 @@ import json
 import math
 
 import duckdb
+import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
@@ -14,15 +16,18 @@ import yaml
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import average_precision_score, roc_auc_score
+from sklearn.metrics import average_precision_score, brier_score_loss, roc_auc_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
 
+from src.calibrate import PlattCalibrator, plot_reliability
 from src.features import FEATURE_COLUMNS
 from src.load import DB_PATH, PROJECT_ROOT
 
 CONFIG_PATH = PROJECT_ROOT / "config.yaml"
 METRICS_PATH = PROJECT_ROOT / "reports" / "metrics.json"
+CALIBRATION_PLOT_PATH = PROJECT_ROOT / "reports" / "figures" / "calibration.png"
+MODELS_DIR = PROJECT_ROOT / "models"  # gitignored: rebuilt by running this script
 
 # How each feature is prepared for logistic regression.
 LOG_NUMERIC = ["amt", "amt_to_median_ratio"]  # heavily skewed: log first, then scale
@@ -162,6 +167,35 @@ def main() -> None:
         for model_name, score in scorers.items()
     }
 
+    # Calibrate LightGBM on the calibration month only, then check it on every later set.
+    raw = {name: scorers["lightgbm"](part) for name, part in sets.items() if name != "train"}
+    calibrator = PlattCalibrator().fit(raw["calibration"], calibration["is_fraud"])
+    calibrated = {name: calibrator.predict(scores) for name, scores in raw.items()}
+    calibration_report = {
+        "method": "platt",
+        "fitted_on": "calibration",
+        "slope": calibrator.slope,
+        "intercept": calibrator.intercept,
+        "sets": {
+            name: {
+                "actual_fraud_rate": float(sets[name]["is_fraud"].mean()),
+                "mean_raw": float(raw[name].mean()),
+                "mean_calibrated": float(calibrated[name].mean()),
+                "brier_raw": float(brier_score_loss(sets[name]["is_fraud"], raw[name])),
+                "brier_calibrated": float(brier_score_loss(sets[name]["is_fraud"], calibrated[name])),
+            }
+            for name in raw
+        },
+    }
+    plot_reliability(
+        test["is_fraud"], raw["test"], calibrated["test"], CALIBRATION_PLOT_PATH,
+        "Reliability on test months (Oct-Dec 2020)",
+    )
+    save_scores(sets, raw, calibrated)
+    MODELS_DIR.mkdir(exist_ok=True)
+    joblib.dump({"model": booster, "categories": categories}, MODELS_DIR / "lightgbm.joblib")
+    joblib.dump(calibrator, MODELS_DIR / "calibrator.joblib")
+
     # The trap: predicting "not fraud" every time is right whenever a transaction is legitimate.
     always_not_fraud_accuracy = 1 - test["is_fraud"].mean()
 
@@ -178,6 +212,7 @@ def main() -> None:
         "lightgbm_scale_pos_weight": booster.get_params()["scale_pos_weight"],
         "lightgbm_trees": int(booster.best_iteration_),
         "lightgbm_feature_importance": feature_importance(booster),
+        "calibration": calibration_report,
     }
     METRICS_PATH.write_text(json.dumps(metrics, indent=2) + "\n")
 
@@ -212,7 +247,34 @@ def main() -> None:
     print(f"\nLightGBM used {metrics['lightgbm_trees']} trees. Feature importance (share of total gain):")
     for feature, share in metrics["lightgbm_feature_importance"].items():
         print(f"{feature:>20} {share:>7.1%}")
-    print(f"\nSaved {METRICS_PATH.relative_to(PROJECT_ROOT)}")
+
+    print(
+        f"\nPlatt calibration (fitted on calibration month): "
+        f"slope {calibrator.slope:.3f}, intercept {calibrator.intercept:.3f}"
+    )
+    print(f"{'set':>12} {'actual':>8} {'mean raw':>9} {'mean cal':>9} {'Brier raw':>10} {'Brier cal':>10}")
+    for name, c in calibration_report["sets"].items():
+        print(
+            f"{name:>12} {c['actual_fraud_rate']:>8.3%} {c['mean_raw']:>9.3%} {c['mean_calibrated']:>9.3%} "
+            f"{c['brier_raw']:>10.5f} {c['brier_calibrated']:>10.5f}"
+        )
+
+    print(f"\nSaved {METRICS_PATH.relative_to(PROJECT_ROOT)}, {CALIBRATION_PLOT_PATH.relative_to(PROJECT_ROOT)}, "
+          f"models/, and the `scores` table in {DB_PATH.name}")
+
+
+def save_scores(sets: dict, raw: dict, calibrated: dict) -> None:
+    """Write each scored transaction to a `scores` table for the decision policy."""
+    frames = [
+        sets[name][["trans_num", "trans_date_trans_time", "amt", "is_fraud"]].assign(
+            set_name=name, p_raw=raw[name], p_fraud=calibrated[name]
+        )
+        for name in raw
+    ]
+    scores = pd.concat(frames, ignore_index=True)
+    with duckdb.connect(str(DB_PATH)) as con:
+        con.register("scores_df", scores)
+        con.execute("CREATE OR REPLACE TABLE scores AS SELECT * FROM scores_df ORDER BY trans_date_trans_time, trans_num")
 
 
 if __name__ == "__main__":

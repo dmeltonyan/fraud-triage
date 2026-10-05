@@ -82,5 +82,34 @@
     "txn_count_24h": 0.0086,
     "distance_km": 0.0071,
     "day_of_week": 0.0027
+  },
+  "calibration": {
+    "method": "platt",
+    "fitted_on": "calibration",
+    "slope": 0.9128768585145592,
+    "intercept": -2.2484365940959754,
+    "sets": {
+      "tuning": {
+        "actual_fraud_rate": 0.0042151803765026604,
+        "mean_raw": 0.008789460004652989,
+        "mean_calibrated": 0.004187040060687306,
+        "brier_raw": 0.003013106202165647,
+        "brier_calibrated": 0.0014946332220043361
+      },
+      "calibration": {
+        "actual_fraud_rate": 0.004889764572217508,
+        "mean_raw": 0.009486910887517196,
+        "mean_calibrated": 0.004884942210556627,
+        "brier_raw": 0.0027790520743397953,
+        "brier_calibrated": 0.0013114353133064716
+      },
+      "test": {
+        "actual_fraud_rate": 0.003324796373982758,
+        "mean_raw": 0.00782766295518561,
+        "mean_calibrated": 0.0035960410979630846,
+        "brier_raw": 0.002594075751306408,
+        "brier_calibrated": 0.0011275348806834907
+      }
+    }
   }
 }
