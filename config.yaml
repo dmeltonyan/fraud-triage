@@ -13,3 +13,6 @@ split:
   # train = Jan 2019 - Jun 2020 (18 months), validation = Jul - Sep 2020, test = Oct - Dec 2020
   train_end: "2020-07-01"
   validation_end: "2020-10-01"
+
+evaluation:
+  review_share: 0.01           # assumption: share of transactions analysts could review, used for "recall at top 1%"

@@ -1,0 +1,38 @@
+{
+  "split": {
+    "train_end": "2020-07-01",
+    "validation_end": "2020-10-01"
+  },
+  "review_share": 0.01,
+  "sets": {
+    "train": {
+      "rows": 1326733,
+      "fraud": 7639
+    },
+    "validation": {
+      "rows": 244140,
+      "fraud": 1076
+    },
+    "test": {
+      "rows": 281521,
+      "fraud": 936
+    }
+  },
+  "always_not_fraud_accuracy_test": 0.9966752036260172,
+  "models": {
+    "logistic_regression": {
+      "validation": {
+        "pr_auc": 0.4169644791141464,
+        "roc_auc": 0.9224729482112318,
+        "recall_at_top": 0.595724907063197,
+        "precision_at_top": 0.26248976248976247
+      },
+      "test": {
+        "pr_auc": 0.37578614716259695,
+        "roc_auc": 0.9104938681987527,
+        "recall_at_top": 0.5982905982905983,
+        "precision_at_top": 0.19886363636363635
+      }
+    }
+  }
+}
