@@ -27,7 +27,7 @@ I'm a computer science student with limited professional development experience.
 
 ## Stack
 
-- Python 3.11, pandas, scikit-learn, LightGBM, SHAP
+- Python 3.14, pandas, scikit-learn, LightGBM, SHAP
 - DuckDB (a local file database at `data/fraud.duckdb`) for all analysis and feature engineering in Weeks 1 and 2
 - PostgreSQL on Supabase, accessed with SQLAlchemy, only in Week 3 for the review app and a small demo sample
 - FastAPI for the scoring and review API
@@ -42,6 +42,7 @@ fraud-triage/
   src/             Python package: loading, features, model, policy, api
   notebooks/       exploration only, never imported by src/
   tests/           pytest tests
+  reports/         saved charts and results
   web/             Next.js review app (week 3)
   config.yaml      costs, thresholds, review budget
   DECISIONS.md     decision log for interview prep
