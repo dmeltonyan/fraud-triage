@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Plain and professional: white background, dark text, one accent colour. */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --muted: #525252;
+  --line: #e5e5e5;
+  --accent: #1d4ed8;
+  --accent-light: #eff6ff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
