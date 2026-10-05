@@ -8,7 +8,7 @@ One step per session. Check the box only when "done when" is true.
   Done when: `python -c "import pandas, lightgbm"` runs without errors and the first commit is on GitHub.
 - [x] **2. Load the data.** Write `src/load.py` to combine the two Kaggle CSVs (`fraudTrain.csv` and `fraudTest.csv`) into one `transactions` table in a local DuckDB file at `data/fraud.duckdb`.
   Done when: a SQL query against DuckDB returns the transaction count and the number of fraud cases.
-- [ ] **3. Explore.** In a notebook: fraud rate, fraud by category and hour, amount distributions, date range.
+- [x] **3. Explore.** In a notebook: fraud rate, fraud by category and hour, amount distributions, date range.
   Done when: you can state the fraud rate and the date range from memory.
 - [ ] **4. Features.** Transactions per card in the last hour and last day, amount compared with that card's usual amount, hour of day, home-to-merchant distance, category. Historical features use only past data. No gender, date of birth, or age.
   Done when: tests in `tests/test_features.py` pass, including one proving no feature uses future data.
