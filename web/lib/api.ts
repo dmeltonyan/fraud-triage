@@ -44,6 +44,30 @@ export type ReviewResult = {
   correct: boolean;
 };
 
+export type PolicyName = "approve_all" | "threshold" | "cost_review_only" | "cost_based";
+
+export type PolicyOutcome = {
+  fraud_dollars_lost: number;
+  fraud_dollars_caught: number;
+  frauds_caught: number;
+  frauds_missed: number;
+  reviews: number;
+  blocks: number;
+  legit_declined: number;
+  total_cost: number;
+};
+
+/** The parts of reports/policy_results.json (GET /stats) the results page uses. */
+export type Stats = {
+  test_months: string[];
+  transactions: number;
+  frauds: number;
+  fraud_dollars: number;
+  costs: { review_cost_usd: number; false_decline_cost_usd: number };
+  default_budget: number;
+  default: Record<PolicyName, PolicyOutcome>;
+};
+
 /** An error response from the API, with its status code and the API's message. */
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
