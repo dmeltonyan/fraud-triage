@@ -28,7 +28,8 @@ I'm a computer science student with limited professional development experience.
 ## Stack
 
 - Python 3.11, pandas, scikit-learn, LightGBM, SHAP
-- PostgreSQL on Supabase, accessed with SQLAlchemy
+- DuckDB (a local file database at `data/fraud.duckdb`) for all analysis and feature engineering in Weeks 1 and 2
+- PostgreSQL on Supabase, accessed with SQLAlchemy, only in Week 3 for the review app and a small demo sample
 - FastAPI for the scoring and review API
 - pytest for tests
 - Next.js with TypeScript for the review app (week 3), in `web/`
@@ -37,7 +38,7 @@ I'm a computer science student with limited professional development experience.
 
 ```
 fraud-triage/
-  data/            raw data (gitignored)
+  data/            raw CSVs and the DuckDB file fraud.duckdb (gitignored)
   src/             Python package: loading, features, model, policy, api
   notebooks/       exploration only, never imported by src/
   tests/           pytest tests
