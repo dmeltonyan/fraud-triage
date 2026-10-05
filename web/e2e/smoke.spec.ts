@@ -84,7 +84,8 @@ test("decision buttons work from the keyboard", async ({ page, isMobile }) => {
 test("results page shows the headline, table and charts", async ({ page }) => {
   await page.goto("/results");
   await expect(page.getByText(/the cost-based policy cost \$[\d,.]+ in total/)).toBeVisible();
-  await expect(page.getByRole("cell", { name: /Cost-based \(this project\)/ })).toBeVisible();
+  // A table cell on desktop, a card on a phone: check whichever is showing.
+  await expect(page.getByText("Cost-based (this project)").filter({ visible: true })).toBeVisible();
   for (const alt of [/Line chart of fraud dollars lost/, /Reliability chart/]) {
     const image = page.getByRole("img", { name: alt });
     await expect(image).toBeVisible();

@@ -21,3 +21,7 @@ node_modules/
 
 # Trained models (rebuild with python -m src.train)
 models/
+
+# Personal planning notes (kept private)
+PROMPTS.md
+LAUNCH_PROMPTS.md

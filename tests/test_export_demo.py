@@ -33,9 +33,9 @@ def test_sample_never_drops_flagged_cases_even_over_the_limit():
 
 def test_demo_table_has_only_the_schema_columns_and_no_personal_fields():
     df = make_decisions().assign(
-        merchant="fraud_Kirlin and Sons", category="misc_net", amt=12.3456, city="Moravian Falls", state="NC",
+        merchant="fraud_Kirlin and Sons", category="misc_net", amt=12.3456, city="Springfield", state="NC",
         p_fraud=0.01, approve=0.1, review=5.0, block=9.9, loss_prevented=-4.9, is_fraud=0,
-        first="Jennifer", last="Banks", street="561 Perry Cove", dob="1988-03-09", cc_num=2703186189652095,
+        first="Test", last="Person", street="1 Example Street", dob="1990-01-01", cc_num=4000000000000002,
     )
     reasons = [["a", "b", "c"]] * len(df)
     table = to_demo_table(df, reasons)

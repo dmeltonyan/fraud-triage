@@ -95,6 +95,8 @@ def print_summary(con: duckdb.DuckDBPyConnection, target: str = "features") -> N
             f"ROUND(AVG(distance_km), 1) AS distance_km "
             f"FROM {target} GROUP BY 1 ORDER BY 1"
         )
+        .df()
+        .to_string(index=False)  # plain text: DuckDB's box-drawn table crashes when output goes to a file on Windows
     )
 
 

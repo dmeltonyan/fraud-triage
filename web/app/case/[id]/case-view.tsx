@@ -61,7 +61,7 @@ export default function CaseView({ id }: { id: string }) {
               {categoryName(c.category)} · {c.city}, {c.state} · {dateTime(c.timestamp)}
             </p>
           </div>
-          <div className="text-right">
+          <div className="sm:text-right">
             <div className="text-2xl font-semibold">{money(c.amount)}</div>
             <div className="text-sm text-muted">Fraud probability {percent(c.fraud_probability)}</div>
           </div>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { PolicyName, Stats } from "@/lib/api";
-import { money } from "@/lib/format";
+import { money, wholeMoney } from "@/lib/format";
 import { errorMessage, useApiGet } from "@/lib/use-api";
 import { LoadError, Loading } from "../status";
 
@@ -43,7 +43,7 @@ export default function ResultsView() {
         <h1 className="text-2xl font-semibold">Results</h1>
         <p className="mt-3 text-lg">
           On three held-out months of simulated card transactions, with analysts limited to {s.default_budget} reviews
-          a day, the cost-based policy cost {money(ours.total_cost)} in total against {money(baseline.total_cost)} for
+          a day, the cost-based policy cost {wholeMoney(ours.total_cost)} in total against {wholeMoney(baseline.total_cost)} for
           reviewing the highest-probability cases: {Math.round(saving * 100)}% less.
         </p>
         <p className="mt-2 text-sm text-muted">
@@ -56,8 +56,39 @@ export default function ResultsView() {
 
       <div>
         <h2 className="text-lg font-semibold">The policies at {s.default_budget} reviews a day</h2>
-        <div className="mt-3 overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
+        {/* Narrow screens (under 640 px): one card per policy, total cost first */}
+        <ul className="mt-3 space-y-3 sm:hidden">
+          {POLICIES.map(({ name, label, description }) => {
+            const o = s.default[name];
+            return (
+              <li
+                key={name}
+                className={`rounded-md border border-line p-4 ${name === "cost_based" ? "bg-accent-light" : ""}`}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-medium">{label}</span>
+                  <span className="text-lg font-semibold">{wholeMoney(o.total_cost)}</span>
+                </div>
+                <p className="mt-1 text-xs text-muted">{description}</p>
+                <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                  <dt className="text-muted">Fraud lost</dt>
+                  <dd className="text-right">{wholeMoney(o.fraud_dollars_lost)}</dd>
+                  <dt className="text-muted">Fraud caught</dt>
+                  <dd className="text-right">{wholeMoney(o.fraud_dollars_caught)}</dd>
+                  <dt className="text-muted">Reviews</dt>
+                  <dd className="text-right">{o.reviews.toLocaleString()}</dd>
+                  <dt className="text-muted">Legitimate declined</dt>
+                  <dd className="text-right">{o.legit_declined.toLocaleString()}</dd>
+                </dl>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="mt-2 text-xs text-muted sm:hidden">Large figure = total cost.</p>
+
+        {/* Wider screens: a table */}
+        <div className="mt-3 hidden sm:block">
+          <table className="w-full text-left text-sm">
             <thead className="border-b border-line text-muted">
               <tr>
                 <th className="py-2 font-medium">Policy</th>

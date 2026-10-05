@@ -8,9 +8,9 @@ HEADER = ",trans_date_trans_time,cc_num,merchant,category,amt,first,last,gender,
 def make_row(index: int, timestamp: str, trans_num: str, is_fraud: int) -> str:
     """One CSV line in the same format as the Kaggle files."""
     return (
-        f'{index},{timestamp},2703186189652095,"fraud_Rippin, Kub and Mann",misc_net,4.97,'
-        f"Jennifer,Banks,F,561 Perry Cove,Moravian Falls,NC,28654,36.0788,-81.1781,3495,"
-        f'"Psychologist, counselling",1988-03-09,{trans_num},1325376018,36.011293,-82.048315,{is_fraud}'
+        f'{index},{timestamp},4000000000000002,"fraud_Rippin, Kub and Mann",misc_net,4.97,'
+        f"Test,Person,F,1 Example Street,Springfield,NC,10001,40.0,-75.0,3495,"
+        f'"Psychologist, counselling",1990-01-01,{trans_num},1325376018,40.1,-75.1,{is_fraud}'
     )
 
 
