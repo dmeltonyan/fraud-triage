@@ -14,7 +14,7 @@ One step per session. Check the box only when "done when" is true.
   Done when: tests in `tests/test_features.py` pass, including one proving no feature uses future data.
 - [x] **5. Time-based split and baseline.** Train, validate, and test by month. Logistic regression baseline.
   Done when: precision-recall AUC prints for the test months.
-- [ ] **6. LightGBM.** Train and compare with the baseline.
+- [x] **6. LightGBM.** Train and compare with the baseline.
   Done when: both scores are recorded in DECISIONS.md.
 
 ## Week 2: decisions and API

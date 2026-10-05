@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 
 from src.features import FEATURE_COLUMNS
-from src.train import CATEGORICAL, LOG_NUMERIC, NUMERIC, recall_at_top, split_by_time
+from src.train import CATEGORICAL, LOG_NUMERIC, NUMERIC, lightgbm_inputs, recall_at_top, split_by_time
 
 
 def make_df():
@@ -49,3 +49,14 @@ def test_recall_at_top():
 def test_every_feature_is_prepared_exactly_once():
     prepared = LOG_NUMERIC + NUMERIC + CATEGORICAL
     assert sorted(prepared) == sorted(FEATURE_COLUMNS)
+
+
+def test_lightgbm_category_codes_match_training():
+    # A set that lacks some training categories must still use the training codes,
+    # otherwise "grocery_pos" could mean a different code at test time.
+    row = {column: 1.0 for column in FEATURE_COLUMNS}
+    df = pd.DataFrame([{**row, "category": "travel"}, {**row, "category": "never_seen"}])
+    X = lightgbm_inputs(df, categories=["gas_transport", "grocery_pos", "travel"])
+    assert list(X.columns) == FEATURE_COLUMNS
+    assert list(X["category"].cat.categories) == ["gas_transport", "grocery_pos", "travel"]
+    assert X["category"].cat.codes.tolist() == [2, -1]  # unseen category becomes missing

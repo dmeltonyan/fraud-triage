@@ -33,6 +33,31 @@
         "recall_at_top": 0.5982905982905983,
         "precision_at_top": 0.19886363636363635
       }
+    },
+    "lightgbm": {
+      "validation": {
+        "pr_auc": 0.8431235581242816,
+        "roc_auc": 0.9969478738568953,
+        "recall_at_top": 0.9052044609665427,
+        "precision_at_top": 0.3988533988533989
+      },
+      "test": {
+        "pr_auc": 0.837569485812974,
+        "roc_auc": 0.9971796162596188,
+        "recall_at_top": 0.9337606837606838,
+        "precision_at_top": 0.3103693181818182
+      }
     }
+  },
+  "lightgbm_trees": 643,
+  "lightgbm_feature_importance": {
+    "amt": 0.6785,
+    "category": 0.1488,
+    "hour_of_day": 0.1044,
+    "amt_to_median_ratio": 0.0283,
+    "txn_count_1h": 0.0216,
+    "txn_count_24h": 0.0086,
+    "distance_km": 0.0071,
+    "day_of_week": 0.0027
   }
 }
