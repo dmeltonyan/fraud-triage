@@ -61,8 +61,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export function apiGet<T>(path: string): Promise<T> {
-  return request<T>(path);
+export function apiGet<T>(path: string, init?: RequestInit): Promise<T> {
+  return request<T>(path, init); // init can carry an AbortSignal to cancel a stale request
 }
 
 export function apiPost<T>(path: string, body: unknown): Promise<T> {

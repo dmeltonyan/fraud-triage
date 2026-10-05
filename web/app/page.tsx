@@ -1,10 +1,11 @@
+import { Suspense } from "react";
+import QueueView from "./queue-view";
+
 export default function QueuePage() {
+  // QueueView reads ?date= from the URL, which Next.js requires to sit inside Suspense.
   return (
-    <section>
-      <h1 className="text-2xl font-semibold">Review queue</h1>
-      <p className="mt-2 text-muted">
-        Transactions the cost-based policy sent to an analyst, largest expected loss first.
-      </p>
-    </section>
+    <Suspense fallback={<p className="text-muted">Loading…</p>}>
+      <QueueView />
+    </Suspense>
   );
 }
