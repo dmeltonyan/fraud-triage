@@ -34,11 +34,13 @@ One step per session. Check the box only when "done when" is true.
 
 ## Week 3: review app and deployment
 
-- [ ] **13. Review queue.** Next.js page listing cases by expected loss, a detail view with amount, merchant, score, and reasons, and Confirm fraud / Mark legitimate buttons.
-  Done when: reviewing a case in the browser saves the decision to Postgres.
-- [ ] **14. Monitoring page.** Weekly score distribution and fraud caught across the test months.
-  Done when: the page loads with real numbers.
-- [ ] **15. Deploy.** Load a pre-scored sample of about 20,000 test-period transactions into Supabase, deploy the API (Render or Railway) and the web app (Vercel), and add a banner saying the data is simulated.
+Design: scoring runs offline (batch scoring). The deployed demo serves precomputed results from Supabase Postgres, so the production API never loads LightGBM or SHAP and stays small enough for free hosting.
+
+- [ ] **13. Demo data and production API.** `sql/schema.sql` and `src/export_demo.py` load a pre-scored sample of about 20,000 test-period transactions (every review and block case plus a random sample of approvals, with no personal fields) into Supabase. The API gains a `postgres` mode that serves those results and records reviews, with its own small `requirements-api.txt`.
+  Done when: the API in postgres mode answers every endpoint from Supabase.
+- [ ] **14. Review app.** Next.js in `web/`: a review queue by expected loss, a case page with reasons and the expected cost of each action, Confirm fraud / Mark legitimate buttons, a results page with the policy comparison, and a banner saying the data is simulated.
+  Done when: reviewing a case in the browser saves the decision to Supabase.
+- [ ] **15. Deploy.** The API on Render and the web app on Vercel, following `DEPLOY.md`.
   Done when: the live link works on your phone.
 
 ## Week 4: demos and publishing
@@ -49,4 +51,4 @@ One step per session. Check the box only when "done when" is true.
 
 ## Cut list if you fall behind
 
-Cut 14 first, then 11. Never cut 5, 9, or 10.
+Cut the app's automated smoke tests first (check by hand instead), then the results page (link the README's results instead), then 11. Never cut 5, 9, or 10.
