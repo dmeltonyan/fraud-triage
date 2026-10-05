@@ -39,14 +39,15 @@ def load_features() -> pd.DataFrame:
         return con.sql("SELECT * FROM features").df()
 
 
-def split_by_time(df: pd.DataFrame, train_end: str, validation_end: str):
-    """Return (train, validation, test). Each end date is the first moment NOT in that set."""
+def split_by_time(df: pd.DataFrame, train_end: str, tuning_end: str, calibration_end: str):
+    """Return (train, tuning, calibration, test). Each end date is the first moment NOT in that set."""
     time = df["trans_date_trans_time"]
-    train_end, validation_end = pd.Timestamp(train_end), pd.Timestamp(validation_end)
+    train_end, tuning_end, calibration_end = map(pd.Timestamp, (train_end, tuning_end, calibration_end))
     train = df[time < train_end]
-    validation = df[(time >= train_end) & (time < validation_end)]
-    test = df[time >= validation_end]
-    return train, validation, test
+    tuning = df[(time >= train_end) & (time < tuning_end)]
+    calibration = df[(time >= tuning_end) & (time < calibration_end)]
+    test = df[time >= calibration_end]
+    return train, tuning, calibration, test
 
 
 def build_baseline() -> Pipeline:
@@ -76,25 +77,40 @@ def lightgbm_inputs(df: pd.DataFrame, categories: list[str]) -> pd.DataFrame:
     return X
 
 
-def train_lightgbm(train: pd.DataFrame, validation: pd.DataFrame, settings: dict):
-    """Fit LightGBM on train, using validation only to decide when to stop adding trees."""
+def train_lightgbm(train: pd.DataFrame, tuning: pd.DataFrame, settings: dict, scale_pos_weight: float):
+    """Fit LightGBM on train, using the tuning months only to decide when to stop adding trees."""
     categories = sorted(train["category"].unique())
     model = lgb.LGBMClassifier(
         n_estimators=settings["max_trees"],
         learning_rate=settings["learning_rate"],
-        scale_pos_weight=settings["scale_pos_weight"],
+        scale_pos_weight=scale_pos_weight,
         random_state=42,
         verbose=-1,
     )
     model.fit(
         lightgbm_inputs(train, categories),
         train["is_fraud"],
-        eval_X=lightgbm_inputs(validation, categories),
-        eval_y=validation["is_fraud"],
+        eval_X=lightgbm_inputs(tuning, categories),
+        eval_y=tuning["is_fraud"],
         eval_metric="average_precision",
         callbacks=[lgb.early_stopping(settings["early_stopping_rounds"], verbose=False)],
     )
     return model, categories
+
+
+def tune_lightgbm(train: pd.DataFrame, tuning: pd.DataFrame, settings: dict):
+    """Train one model per scale_pos_weight candidate and keep the best on tuning PR-AUC.
+
+    Returns (best model, its categories, {candidate weight: tuning PR-AUC}).
+    """
+    tried, best = {}, None
+    for weight in settings["scale_pos_weight_candidates"]:
+        model, categories = train_lightgbm(train, tuning, settings, weight)
+        scores = model.predict_proba(lightgbm_inputs(tuning, categories))[:, 1]
+        tried[weight] = float(average_precision_score(tuning["is_fraud"], scores))
+        if best is None or tried[weight] > tried[best[2]]:
+            best = (model, categories, weight)
+    return best[0], best[1], tried
 
 
 def feature_importance(model: lgb.LGBMClassifier, top: int = 10) -> dict[str, float]:
@@ -126,11 +142,12 @@ def evaluate(y_true, scores, review_share: float) -> dict:
 def main() -> None:
     config = load_config()
     review_share = config["evaluation"]["review_share"]
-    train, validation, test = split_by_time(load_features(), **config["split"])
+    train, tuning, calibration, test = split_by_time(load_features(), **config["split"])
+    sets = {"train": train, "tuning": tuning, "calibration": calibration, "test": test}
 
     baseline = build_baseline()
     baseline.fit(train[FEATURE_COLUMNS], train["is_fraud"])
-    booster, categories = train_lightgbm(train, validation, config["lightgbm"])
+    booster, categories, weights_tried = tune_lightgbm(train, tuning, config["lightgbm"])
 
     # Each model's probability of fraud for a set of transactions.
     scorers = {
@@ -140,7 +157,7 @@ def main() -> None:
     results = {
         model_name: {
             name: evaluate(part["is_fraud"], score(part), review_share)
-            for name, part in [("validation", validation), ("test", test)]
+            for name, part in [("tuning", tuning), ("calibration", calibration), ("test", test)]
         }
         for model_name, score in scorers.items()
     }
@@ -148,34 +165,49 @@ def main() -> None:
     # The trap: predicting "not fraud" every time is right whenever a transaction is legitimate.
     always_not_fraud_accuracy = 1 - test["is_fraud"].mean()
 
+    # Keep the previous run's test results so we can see what this run changed.
+    previous = json.loads(METRICS_PATH.read_text()) if METRICS_PATH.exists() else None
+
     metrics = {
         "split": config["split"],
         "review_share": review_share,
-        "sets": {
-            name: {"rows": len(part), "fraud": int(part["is_fraud"].sum())}
-            for name, part in [("train", train), ("validation", validation), ("test", test)]
-        },
+        "sets": {name: {"rows": len(part), "fraud": int(part["is_fraud"].sum())} for name, part in sets.items()},
         "always_not_fraud_accuracy_test": float(always_not_fraud_accuracy),
         "models": results,
+        "lightgbm_scale_pos_weight_tried": {str(w): pr_auc for w, pr_auc in weights_tried.items()},
+        "lightgbm_scale_pos_weight": booster.get_params()["scale_pos_weight"],
         "lightgbm_trees": int(booster.best_iteration_),
         "lightgbm_feature_importance": feature_importance(booster),
     }
     METRICS_PATH.write_text(json.dumps(metrics, indent=2) + "\n")
 
     for name, info in metrics["sets"].items():
-        print(f"{name:>10}: {info['rows']:>9,} rows, {info['fraud']:>5,} fraud")
+        print(f"{name:>11}: {info['rows']:>9,} rows, {info['fraud']:>5,} fraud")
     print(f"\nAlways predicting 'not fraud' on test: {always_not_fraud_accuracy:.2%} accurate, catches 0 fraud")
 
-    print(f"\nTest months (recall and precision when reviewing the riskiest {review_share:.0%}):")
-    print(f"{'':>20} {'PR-AUC':>8} {'ROC AUC':>8} {'recall':>8} {'precision':>10}")
+    print("\nLightGBM scale_pos_weight, PR-AUC on tuning months:")
+    for weight, pr_auc in weights_tried.items():
+        chosen = "  <- chosen" if weight == metrics["lightgbm_scale_pos_weight"] else ""
+        print(f"{weight:>6}: {pr_auc:.3f}{chosen}")
+
+    print(f"\nRecall and precision when reviewing the riskiest {review_share:.0%}:")
+    print(f"{'':>20} {'set':>12} {'PR-AUC':>8} {'ROC AUC':>8} {'recall':>8} {'precision':>10}")
     for model_name, by_set in results.items():
-        m = by_set["test"]
-        print(
-            f"{model_name:>20} {m['pr_auc']:>8.3f} {m['roc_auc']:>8.3f} "
-            f"{m['recall_at_top']:>8.1%} {m['precision_at_top']:>10.1%}"
-        )
-    print("(validation scores are in the metrics file; LightGBM's are slightly optimistic "
-          "because validation chose its number of trees)")
+        for set_name, m in by_set.items():
+            print(
+                f"{model_name:>20} {set_name:>12} {m['pr_auc']:>8.3f} {m['roc_auc']:>8.3f} "
+                f"{m['recall_at_top']:>8.1%} {m['precision_at_top']:>10.1%}"
+            )
+    print("(LightGBM's tuning scores are optimistic: the tuning months chose its settings)")
+
+    if previous:
+        print("\nTest results compared with the previous run:")
+        for model_name in results:
+            old, new = previous["models"][model_name]["test"], results[model_name]["test"]
+            print(
+                f"{model_name:>20}: PR-AUC {old['pr_auc']:.3f} -> {new['pr_auc']:.3f} | "
+                f"recall at top {old['recall_at_top']:.1%} -> {new['recall_at_top']:.1%}"
+            )
 
     print(f"\nLightGBM used {metrics['lightgbm_trees']} trees. Feature importance (share of total gain):")
     for feature, share in metrics["lightgbm_feature_importance"].items():

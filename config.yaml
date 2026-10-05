@@ -5,22 +5,29 @@ costs:
   # missed fraud costs the transaction amount itself
 
 review:
-  daily_review_budget: 200     # assumption: cases analysts can review per day
+  daily_review_budget: 30      # assumption: cases analysts can review per day. About 1% of the
+                               # ~3,000 transactions a day in the test months, and ~3x the ~10 frauds
+                               # a day, so analysts can't review every suspicious case and must choose.
 
 split:
   # Our choice, not an assumption: data runs 2019-01-01 to 2020-12-31.
   # Each date is the first day NOT in that set (exclusive end).
-  # train = Jan 2019 - Jun 2020 (18 months), validation = Jul - Sep 2020, test = Oct - Dec 2020
+  # train       = Jan 2019 - Jun 2020 (18 months): fit the models
+  # tuning      = Jul - Aug 2020: choose scale_pos_weight and when to stop adding trees
+  # calibration = Sep 2020: calibrate probabilities (step 7), nothing else
+  # test        = Oct - Dec 2020: final evaluation only
   train_end: "2020-07-01"
-  validation_end: "2020-10-01"
+  tuning_end: "2020-09-01"
+  calibration_end: "2020-10-01"
 
 lightgbm:
-  # Model settings: our choices, tuned only on validation months.
+  # Model settings: our choices, tuned only on the tuning months.
   learning_rate: 0.05
   max_trees: 3000              # upper limit; early stopping picks the actual number
-  early_stopping_rounds: 100   # stop after this many trees with no validation PR-AUC gain
-  scale_pos_weight: 13.0       # fraud rows count 13x; about sqrt(173), the legit-to-fraud ratio in train.
-                               # Beat no weighting (1.0) and full balancing (173) on validation PR-AUC.
+  early_stopping_rounds: 100   # stop after this many trees with no tuning PR-AUC gain
+  # How many times a fraud row counts. Each is tried; the best tuning PR-AUC wins.
+  # 1 = no weighting, 13 = about sqrt(173), 173 = the legit-to-fraud ratio in train (fully balanced).
+  scale_pos_weight_candidates: [1, 13, 173]
 
 evaluation:
   review_share: 0.01           # assumption: share of transactions analysts could review, used for "recall at top 1%"
