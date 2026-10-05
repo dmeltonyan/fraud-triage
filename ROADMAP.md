@@ -36,7 +36,7 @@ One step per session. Check the box only when "done when" is true.
 
 Design: scoring runs offline (batch scoring). The deployed demo serves precomputed results from Supabase Postgres, so the production API never loads LightGBM or SHAP and stays small enough for free hosting.
 
-- [ ] **13. Demo data and production API.** `sql/schema.sql` and `src/export_demo.py` load a pre-scored sample of about 20,000 test-period transactions (every review and block case plus a random sample of approvals, with no personal fields) into Supabase. The API gains a `postgres` mode that serves those results and records reviews, with its own small `requirements-api.txt`.
+- [x] **13. Demo data and production API.** `sql/schema.sql` and `src/export_demo.py` load a pre-scored sample of about 20,000 test-period transactions (every review and block case plus a random sample of approvals, with no personal fields) into Supabase. The API gains a `postgres` mode that serves those results and records reviews, with its own small `requirements-api.txt`.
   Done when: the API in postgres mode answers every endpoint from Supabase.
 - [ ] **14. Review app.** Next.js in `web/`: a review queue by expected loss, a case page with reasons and the expected cost of each action, Confirm fraud / Mark legitimate buttons, a results page with the policy comparison, and a banner saying the data is simulated.
   Done when: reviewing a case in the browser saves the decision to Supabase.
