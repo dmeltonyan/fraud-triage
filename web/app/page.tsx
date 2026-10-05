@@ -131,7 +131,7 @@ export default function OverviewPage() {
         </h2>
         <p className="mt-3">
           Fraud models are easy to train and hard to act on. Fraud is rare (about 1 in 190 transactions here), so a
-          model that never flags anything is 99.7% accurate and useless. And analysts can only check a handful of cases
+          model that never flags anything is 99.5% accurate and useless. And analysts can only check a handful of cases
           a day, so the real question isn&apos;t &ldquo;is this fraud?&rdquo; but &ldquo;which cases deserve a
           person&apos;s time?&rdquo;
         </p>
