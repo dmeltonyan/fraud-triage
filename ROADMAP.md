@@ -25,7 +25,7 @@ One step per session. Check the box only when "done when" is true.
   Done when: changing a value in the config changes the results without touching code.
 - [x] **9. Decision policy.** Expected cost of approve, review, and block per transaction; pick the cheapest; enforce a daily review budget ranked by expected loss prevented.
   Done when: tests in `tests/test_policy.py` pass.
-- [ ] **10. Policy comparison.** Dollars lost on the test months for approve-everything, a fixed score threshold, and the cost-based policy.
+- [x] **10. Policy comparison.** Dollars lost on the test months for approve-everything, a fixed score threshold, and the cost-based policy.
   Done when: one chart compares all three and you can state the headline number.
 - [ ] **11. Explanations.** Top three SHAP features per transaction.
   Done when: any transaction's reasons can be printed in plain words.
