@@ -27,7 +27,7 @@ One step per session. Check the box only when "done when" is true.
   Done when: tests in `tests/test_policy.py` pass.
 - [x] **10. Policy comparison.** Dollars lost on the test months for approve-everything, a fixed score threshold, and the cost-based policy.
   Done when: one chart compares all three and you can state the headline number.
-- [ ] **11. Explanations.** Top three SHAP features per transaction.
+- [x] **11. Explanations.** Top three SHAP features per transaction.
   Done when: any transaction's reasons can be printed in plain words.
 - [ ] **12. API.** FastAPI with `POST /score`, `GET /queue`, and `POST /review/{id}`.
   Done when: each endpoint works from the auto-generated `/docs` page.
