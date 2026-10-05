@@ -42,3 +42,9 @@ next-env.d.ts
 
 # ...but keep the example file, which has no secrets
 !.env.example
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
