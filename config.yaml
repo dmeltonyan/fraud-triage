@@ -31,6 +31,11 @@ lightgbm:
   # 1 = no weighting, 13 = about sqrt(173), 173 = the legit-to-fraud ratio in train (fully balanced).
   scale_pos_weight_candidates: [1, 13, 173]
 
+api:
+  # Our choices, protecting the public demo's POST /review endpoint.
+  review_rate_limit_per_minute: 10  # reviews one IP address may submit per minute
+  max_total_reviews: 5000           # the demo stops accepting reviews past this; empty with python -m src.api.reset_reviews
+
 demo:
   max_rows: 20000              # our choice: size of the sample loaded into Supabase for the live demo.
                                # Every review and block case, then random approvals up to this total.

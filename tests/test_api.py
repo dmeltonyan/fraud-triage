@@ -3,8 +3,11 @@ import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 
-from src.api.main import app, get_service
+from src.api.local import get_service
+from src.api.main import create_app
 from src.api.service import FraudService
+
+app = create_app("duckdb")
 
 CONFIG = {
     "costs": {"review_cost_usd": 5.0, "false_decline_cost_usd": 10.0},

@@ -12,7 +12,6 @@ import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
-import yaml
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
@@ -21,10 +20,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
 
 from src.calibrate import PlattCalibrator, plot_reliability
+from src.config import load_config  # noqa: F401  (other modules import it from here too)
 from src.features import FEATURE_COLUMNS
 from src.load import DB_PATH, PROJECT_ROOT
 
-CONFIG_PATH = PROJECT_ROOT / "config.yaml"
 METRICS_PATH = PROJECT_ROOT / "reports" / "metrics.json"
 CALIBRATION_PLOT_PATH = PROJECT_ROOT / "reports" / "figures" / "calibration.png"
 MODELS_DIR = PROJECT_ROOT / "models"  # gitignored: rebuilt by running this script
@@ -33,10 +32,6 @@ MODELS_DIR = PROJECT_ROOT / "models"  # gitignored: rebuilt by running this scri
 LOG_NUMERIC = ["amt", "amt_to_median_ratio"]  # heavily skewed: log first, then scale
 NUMERIC = ["txn_count_1h", "txn_count_24h", "distance_km"]  # scale only
 CATEGORICAL = ["category", "hour_of_day", "day_of_week"]  # one column per value
-
-
-def load_config() -> dict:
-    return yaml.safe_load(CONFIG_PATH.read_text())
 
 
 def load_features() -> pd.DataFrame:

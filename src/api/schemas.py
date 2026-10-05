@@ -58,3 +58,28 @@ class ReviewResponse(BaseModel):
     decision: Literal["fraud", "legitimate"]
     note: str | None
     reviewed_at: datetime
+
+
+# Production demo mode (DATA_BACKEND=postgres)
+
+
+class TransactionDetail(BaseModel):
+    """Everything about one case except the true label, which is only revealed after a review."""
+
+    transaction_id: str
+    timestamp: datetime
+    merchant: str
+    category: str
+    amount: float
+    city: str
+    state: str
+    fraud_probability: float
+    action: Literal["approve", "review", "block"]
+    expected_costs: ExpectedCosts
+    loss_prevented: float
+    reasons: list[str]
+
+
+class DemoReviewResponse(ReviewResponse):
+    is_fraud: bool = Field(description="the true label from the dataset")
+    correct: bool = Field(description="whether the analyst's decision matched the true label")

@@ -11,11 +11,11 @@ clears any reviews made in the app.
 """
 
 import argparse
-import os
 
 import duckdb
 import pandas as pd
 
+from src.config import database_url
 from src.explain import contributions, load_model, load_test_features, top_reasons
 from src.load import DATA_DIR, DB_PATH, PROJECT_ROOT
 from src.policy import APPROVE, BLOCK, REVIEW, cost_based_policy
@@ -82,20 +82,6 @@ def build_demo(config: dict) -> pd.DataFrame:
     contrib = contributions(model, sample)
     reasons = [top_reasons(sample.loc[i], contrib.loc[i]) for i in sample.index]
     return to_demo_table(sample, reasons)
-
-
-def database_url() -> str:
-    from dotenv import load_dotenv
-
-    load_dotenv(PROJECT_ROOT / ".env")
-    url = os.environ.get("DATABASE_URL")
-    if not url or "user:password@host" in url:
-        raise SystemExit("DATABASE_URL is not set. Copy .env.example to .env and paste your Supabase connection string.")
-    # SQLAlchemy needs to be told which driver to use (psycopg version 3).
-    for prefix in ("postgresql://", "postgres://"):
-        if url.startswith(prefix):
-            return "postgresql+psycopg://" + url[len(prefix):]
-    return url
 
 
 def upload(demo: pd.DataFrame) -> None:

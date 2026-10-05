@@ -1,0 +1,7 @@
+# Only what the deployed API needs (DATA_BACKEND=postgres). No LightGBM, SHAP, pandas or DuckDB.
+fastapi==0.142.2
+uvicorn==0.54.0
+sqlalchemy==2.1.3
+psycopg[binary]==3.3.6
+pyyaml==6.0.3
+python-dotenv==1.2.4
