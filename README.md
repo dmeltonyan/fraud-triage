@@ -4,7 +4,7 @@ A fraud detection system that turns a model's fraud probability into a decision 
 
 **Result:** on three held-out months of simulated card transactions, with analysts limited to 30 reviews a day, the cost-based policy cost **$12,762** in total against **$37,964** for the usual approach of reviewing the highest-probability transactions.
 
-**Live demo:** _link coming soon_ · **Video walkthrough:** _link coming soon_ · **Decision log:** [DECISIONS.md](DECISIONS.md)
+**Live demo:** [fraud-triage-theta.vercel.app](https://fraud-triage-theta.vercel.app) · **Video walkthrough:** _link coming soon_ · **Decision log:** [DECISIONS.md](DECISIONS.md)
 
 ![Overview page of the Fraud Triage review app](docs/images/overview.png)
 
