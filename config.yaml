@@ -8,6 +8,8 @@ review:
   daily_review_budget: 200     # assumption: cases analysts can review per day
 
 split:
-  # fill in once you know the dataset's date range (ROADMAP step 3)
-  train_end: null
-  validation_end: null
+  # Our choice, not an assumption: data runs 2019-01-01 to 2020-12-31.
+  # Each date is the first day NOT in that set (exclusive end).
+  # train = Jan 2019 - Jun 2020 (18 months), validation = Jul - Sep 2020, test = Oct - Dec 2020
+  train_end: "2020-07-01"
+  validation_end: "2020-10-01"
