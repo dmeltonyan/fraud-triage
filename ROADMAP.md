@@ -29,7 +29,7 @@ One step per session. Check the box only when "done when" is true.
   Done when: one chart compares all three and you can state the headline number.
 - [x] **11. Explanations.** Top three SHAP features per transaction.
   Done when: any transaction's reasons can be printed in plain words.
-- [ ] **12. API.** FastAPI with `POST /score`, `GET /queue`, and `POST /review/{id}`.
+- [x] **12. API.** FastAPI with `POST /score`, `GET /queue`, and `POST /review/{id}`.
   Done when: each endpoint works from the auto-generated `/docs` page.
 
 ## Week 3: review app and deployment
