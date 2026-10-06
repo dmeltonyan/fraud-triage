@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { wholeMoney } from "@/lib/format";
-import { EXAMPLE_CASE_ID, FACTS, REPO_URL } from "@/lib/project-facts";
+import { DATASET, EXAMPLE_CASE_ID, FACTS, REPO_URL, STACK } from "@/lib/project-facts";
 import ActionBadge from "./action-badge";
 import WarmUp from "./warm-up";
 
@@ -21,15 +21,6 @@ const STEPS = [
     title: "An analyst reviews",
     body: "That's you. Open a case, read why it was flagged, and make the call. The app then reveals whether it was really fraud.",
   },
-];
-
-const STACK = [
-  { layer: "Machine learning", tools: ["Python", "LightGBM", "scikit-learn", "SHAP"] },
-  { layer: "Data", tools: ["DuckDB", "PostgreSQL (Supabase)", "SQLAlchemy"] },
-  { layer: "API", tools: ["FastAPI", "Pydantic"] },
-  { layer: "Web", tools: ["Next.js", "TypeScript", "Tailwind CSS"] },
-  { layer: "Testing", tools: ["pytest", "Playwright"] },
-  { layer: "Hosting", tools: ["Render", "Vercel"] },
 ];
 
 export default function OverviewPage() {
@@ -58,7 +49,28 @@ export default function OverviewPage() {
         <h1 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl">
           A fraud model says how likely fraud is. This system decides what to do about it.
         </h1>
-        <p className="mt-4 max-w-3xl text-lg text-muted">
+        <div className="mt-4 max-w-3xl space-y-2 text-sm">
+          <p>
+            <span className="font-semibold">Data:</span>{" "}
+            <a href={DATASET.url} className="text-accent hover:underline">
+              {DATASET.name}
+            </a>{" "}
+            <span className="text-muted">
+              · {(FACTS.transactions / 1e6).toFixed(2)}M card transactions, January 2019 to December 2020, generated
+              with the Sparkov simulator.
+            </span>
+          </p>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 font-semibold">Built with:</span>
+            {STACK.map((tool) => (
+              <span key={tool} className="rounded-md border border-line bg-surface px-2 py-0.5 text-xs">
+                {tool}
+              </span>
+            ))}
+          </div>
+          <p className="text-muted">Deployed on Render and Vercel.</p>
+        </div>
+        <p className="mt-5 max-w-3xl text-lg text-muted">
           Each card transaction is scored by a machine-learning model. A cost-based policy then picks one of three
           actions by comparing expected dollar losses, with only a limited number of analyst reviews per day:
         </p>
@@ -139,27 +151,7 @@ export default function OverviewPage() {
           Ranking by probability alone wastes review slots on small purchases. Ranking by expected dollars, and
           blocking near-certain fraud outright, catches more of the money with fewer reviews.
         </p>
-      </section>
-
-      <section aria-labelledby="stack">
-        <h2 id="stack" className="text-2xl font-semibold">
-          Built with
-        </h2>
-        <dl className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
-          {STACK.map(({ layer, tools }) => (
-            <div key={layer}>
-              <dt className="text-sm font-semibold">{layer}</dt>
-              <dd className="mt-2 flex flex-wrap gap-2">
-                {tools.map((tool) => (
-                  <span key={tool} className="rounded-md border border-line bg-surface px-2 py-1 text-sm">
-                    {tool}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          ))}
-        </dl>
-        <p className="mt-6 text-sm text-muted">
+        <p className="mt-3 text-sm text-muted">
           The model scores transactions offline; this demo serves the precomputed results so it can run on free
           hosting. Full design decisions, tests and limitations are in the{" "}
           <a href={REPO_URL} className="text-accent hover:underline">

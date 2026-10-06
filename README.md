@@ -1,8 +1,12 @@
 # Fraud Triage
 
+**Data:** [Kaggle: Credit Card Transactions Fraud Detection Dataset](https://www.kaggle.com/datasets/kartik2112/fraud-detection) · 1.85M card transactions, January 2019 to December 2020, generated with the Sparkov simulator.
+
+**Built with:** Python · pandas · LightGBM · scikit-learn · SHAP · DuckDB · PostgreSQL (Supabase) · FastAPI · Next.js · TypeScript · Tailwind CSS · pytest · Playwright. Deployed on Render and Vercel.
+
 A fraud detection system that turns a model's fraud probability into a decision (approve, send to an analyst, or block) by comparing expected dollar costs under a limited daily review budget.
 
-**Result:** on three held-out months of simulated card transactions, with analysts limited to 30 reviews a day, the cost-based policy cost **$12,762** in total against **$37,964** for the usual approach of reviewing the highest-probability transactions.
+**Result:** on three held-out months of card transactions from the Kaggle dataset, with analysts limited to 30 reviews a day, the cost-based policy cost **$12,762** in total against **$37,964** for the usual approach of reviewing the highest-probability transactions.
 
 **Live demo:** [fraud-triage-theta.vercel.app](https://fraud-triage-theta.vercel.app) · **Video walkthrough:** _link coming soon_ · **Decision log:** [DECISIONS.md](DECISIONS.md)
 
@@ -70,7 +74,7 @@ The full log, with the reasoning for each, is in [DECISIONS.md](DECISIONS.md).
 
 ## Assumptions and limitations
 
-- **Simulated data.** The [Sparkov dataset](https://www.kaggle.com/datasets/kartik2112/fraud-detection) is generated, so these results say nothing about real banks. It also never produces a fraud above $1,376, so the model learned that very large purchases are safe; real fraudsters would exploit that.
+- **Dataset.** No fraud in the data is above $1,376, so the model learned that very large purchases are safe; real fraudsters would exploit that.
 - **Cost assumptions.** $5 per review and $10 per wrongly declined customer are guesses, set in `config.yaml`. The conclusion holds when the review cost is halved or doubled, and when the decline cost is raised to $50 or $100, though blocking becomes much more cautious.
 - **Simplifications.** Analysts are assumed never to make mistakes, an approved fraud loses its full amount, and the daily budget is applied with the whole day in view, as if analysts worked through the queue at the end of the day.
 - **Batch scoring.** The API scores transactions that are already in the database. Scoring a brand-new transaction live would need a store of each card's recent activity.

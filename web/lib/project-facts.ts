@@ -24,6 +24,28 @@ export const FACTS = {
 
 export const REPO_URL = "https://github.com/dmeltonyan/fraud-triage";
 
+export const DATASET = {
+  name: "Kaggle: Credit Card Transactions Fraud Detection Dataset",
+  url: "https://www.kaggle.com/datasets/kartik2112/fraud-detection",
+};
+
+// Technologies this project actually uses (requirements.txt, requirements-api.txt, web/package.json).
+export const STACK = [
+  "Python",
+  "pandas",
+  "LightGBM",
+  "scikit-learn",
+  "SHAP",
+  "DuckDB",
+  "PostgreSQL (Supabase)",
+  "FastAPI",
+  "Next.js",
+  "TypeScript",
+  "Tailwind CSS",
+  "pytest",
+  "Playwright",
+];
+
 // A case from the demo that reads clearly: $745.88 at 03:48, 21 times the card's
 // typical purchase, sent to review, and really fraud.
 export const EXAMPLE_CASE_ID = "808d112f86a9385ce6243430dbb22dff";

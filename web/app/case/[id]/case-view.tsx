@@ -204,6 +204,7 @@ function Decision({ id }: { id: string }) {
         {busy && "Saving…"}
         {submit.status === "error" && <span role="alert">Couldn&apos;t save: {submit.message}</span>}
       </p>
+      <p className="mt-1 text-xs text-muted">Reviews submitted here are saved and reset periodically.</p>
     </div>
   );
 }

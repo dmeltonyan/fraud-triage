@@ -18,16 +18,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Fraud Triage",
   description:
-    "A fraud model scores card transactions; a cost-based policy decides to approve, review or block them under a daily review budget. Simulated data.",
+    "A fraud model scores card transactions; a cost-based policy decides to approve, review or block them under a daily review budget. Built on the Kaggle Credit Card Transactions Fraud Detection Dataset.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <div role="note" className="bg-accent-light px-4 py-2 text-center text-sm text-accent">
-          Simulated data. Decisions here are for demonstration only.
-        </div>
         <header className="border-b border-line">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-3">
             <Link href="/" className="leading-tight">
